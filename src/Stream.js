@@ -134,6 +134,11 @@ class Stream extends Events {
 
     return this.pipe(reduce)
   }
+
+  toPromise (PromiseConstructor) {
+    const stream = this.__wrapped_stream__ ? this._composePipeline() : this
+    return new PromiseConstructor((resolve, reject) => stream.on('data', resolve).on('error', reject))
+  }
 }
 
 Stream._exposeMethods()
