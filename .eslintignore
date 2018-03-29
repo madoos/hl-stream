@@ -1,4 +1,4 @@
 /node_modules
-/test
+/__tests__
 bin/CLI/index.js
 coverage

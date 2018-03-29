@@ -1,5 +1,7 @@
 'use strict'
 
-module.exports = function dummy () {
-  return true
+const Stream = require('./src/Stream')
+
+module.exports = function HlStream (src, ...args) {
+  return new Stream(src, ...args)
 }
