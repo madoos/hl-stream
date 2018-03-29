@@ -87,6 +87,10 @@ class Stream extends Events {
 
     return this.pipe(filter)
   }
+
+  reject (predicate) {
+    return Stream.filter(R.complement(predicate), this)
+  }
 }
 
 Stream._exposeMethods()
