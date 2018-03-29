@@ -117,6 +117,23 @@ class Stream extends Events {
 
     return this.pipe(batch)
   }
+
+  reduce (initial, fn) {
+    let acc = initial
+    const reduce = new Transform({
+      objectMode: true,
+      transform (data, enc, next) {
+        acc = fn(acc, data)
+        next()
+      },
+      flush (done) {
+        this.push(acc)
+        done()
+      }
+    })
+
+    return this.pipe(reduce)
+  }
 }
 
 Stream._exposeMethods()
