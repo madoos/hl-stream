@@ -2,6 +2,6 @@
 
 const Stream = require('./src/Stream')
 
-module.exports = function HlStream (src, ...args) {
+module.exports = Stream._exposeMethods(function HlStream (src, ...args) {
   return new Stream(src, ...args)
-}
+})

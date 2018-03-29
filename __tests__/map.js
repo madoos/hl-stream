@@ -3,7 +3,7 @@
 const matchers = require('../__mocks__/matchers')
 expect.extend(matchers)
 
-const Stream = require('../src/Stream')
+const Stream = require('../')
 const numberStream = require('../__mocks__/numbers')
 const R = require('ramda')
 
@@ -29,7 +29,7 @@ describe('.map Method', () => {
     const double = R.multiply(2)
     const expected = [0, 2, 4, 6]
     const numbers = numberStream(4)
-    const wrappedStream = new Stream(numbers)
+    const wrappedStream = Stream(numbers)
     const mappedStream = wrappedStream.map(double)
     const composedStream = mappedStream.get()
 

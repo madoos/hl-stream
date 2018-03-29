@@ -3,7 +3,7 @@
 const matchers = require('../__mocks__/matchers')
 expect.extend(matchers)
 
-const Stream = require('../src/Stream')
+const Stream = require('../')
 const numberStream = require('../__mocks__/numbers')
 const R = require('ramda')
 

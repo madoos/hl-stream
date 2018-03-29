@@ -13,15 +13,29 @@ class Stream extends Events {
     this.__wrapped_stream__ = true
   }
 
-  static _exposeMethod (name) {
+  static _exposeMethod (name, Target) {
     const fn = Stream.prototype[name]
     const arity = fn.length + 1
-    Stream[name] = R.curryN(arity, (...args) => fn.apply(args.pop(), args))
+    Target[name] = R.curryN(arity, (...args) => fn.apply(args.pop(), args))
   }
 
-  static _exposeMethods () {
-    ['map', 'tap']
-    .forEach(Stream._exposeMethod)
+  static _exposeStaticMethod (name, Target) {
+    Target[name] = Stream[name]
+  }
+
+  static _exposeMethods (Target = Stream) {
+    const omit = ['constructor', 'name', 'length', 'prototype', 'pipe', 'get']
+    const notPublics = (method) => omit.includes(method) || method.includes('_')
+    const getMethods = R.pipe(Object.getOwnPropertyNames, R.reject(notPublics))
+
+    getMethods(Stream.prototype).forEach((name) => Stream._exposeMethod(name, Target))
+    getMethods(Stream).forEach((name) => Stream._exposeStaticMethod(name, Target))
+
+    return Target
+  }
+
+  static wrap (src, ...args) {
+    return new Stream(src, ...args)
   }
 
   static from (src) {
@@ -60,6 +74,18 @@ class Stream extends Events {
 
   tap (fn) {
     return Stream.map(R.tap(fn), this)
+  }
+
+  filter (predicate) {
+    const filter = new Transform({
+      objectMode: true,
+      transform (data, enc, next) {
+        predicate(data) && this.push(data)
+        next()
+      }
+    })
+
+    return this.pipe(filter)
   }
 }
 

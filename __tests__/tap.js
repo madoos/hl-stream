@@ -3,10 +3,10 @@
 const matchers = require('../__mocks__/matchers')
 expect.extend(matchers)
 
-const Stream = require('../src/Stream')
+const Stream = require('../')
 const numberStream = require('../__mocks__/numbers')
 
-describe('.map Method', () => {
+describe('.tap Method', () => {
 
   it('static .tap should apply bypass fn for each item', (done) => {
     let isTapped = false
@@ -40,7 +40,7 @@ describe('.map Method', () => {
     const results = []
     const expected = [0, 1, 2]
     const numbers = numberStream(3)
-    const wrappedStream = new Stream(numbers)
+    const wrappedStream = Stream(numbers)
 
     const tappedStream = wrappedStream.tap( (data) => {
       times++
