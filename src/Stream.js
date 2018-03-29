@@ -91,6 +91,32 @@ class Stream extends Events {
   reject (predicate) {
     return Stream.filter(R.complement(predicate), this)
   }
+
+  batch (size) {
+    let dataBatch = []
+
+    const batch = new Transform({
+      objectMode: true,
+      transform (data, enc, next) {
+        dataBatch.push(data)
+
+        if (dataBatch.length >= size) {
+          this.push(dataBatch)
+          dataBatch = []
+        }
+        next()
+      },
+      flush (done) {
+        if (dataBatch.length) {
+          this.push(dataBatch)
+          dataBatch = []
+        }
+        done()
+      }
+    })
+
+    return this.pipe(batch)
+  }
 }
 
 Stream._exposeMethods()
