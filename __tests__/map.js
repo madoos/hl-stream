@@ -28,7 +28,7 @@ describe('.map Method', () => {
     const results = []
     const double = R.multiply(2)
     const expected = [0, 2, 4, 6]
-    const numbers = numberStream(4) // => 0, 1, 2, 3
+    const numbers = numberStream(4)
     const wrappedStream = new Stream(numbers)
     const mappedStream = wrappedStream.map(double)
     const composedStream = mappedStream.get()

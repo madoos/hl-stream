@@ -9,7 +9,7 @@ const R = require('ramda')
 
 describe('from Method', () => {
 
-  it('static .from(Array) should create a readable stream with the same values', (done) => {
+  it('static .from(stream) should create a readable stream with the same values', (done) => {
     const values = []
     const numbers = numberStream(4)
     const expected = [0, 1, 2, 3]

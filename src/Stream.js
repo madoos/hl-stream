@@ -20,7 +20,7 @@ class Stream extends Events {
   }
 
   static _exposeMethods () {
-    ['map']
+    ['map', 'tap']
     .forEach(Stream._exposeMethod)
   }
 
@@ -50,14 +50,16 @@ class Stream extends Events {
   map (fn) {
     const map = new Transform({
       objectMode: true,
-      readableObjectMode: true,
-      writableObjectMode: true,
       transform (data, enc, done) {
         done(null, fn(data, enc))
       }
     })
 
     return this.pipe(map)
+  }
+
+  tap (fn) {
+    return Stream.map(R.tap(fn), this)
   }
 }
 
