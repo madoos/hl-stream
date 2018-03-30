@@ -2,7 +2,9 @@
 
 # hl-stream
 
-_high-level streams library_
+High level streams library for Node js inspired by [highland](https://highlandjs.org/) and [ramda](http://ramdajs.com/).
+
+The main focus is to provide a functional interface using the native Node streams.
 
 ## Getting Started
 
@@ -13,18 +15,19 @@ To install:
 In your project:
 
 ``` javascript
- // => Example
-```
 
-## Publish
+const _ = require('hl-stream')
+const R = require('ramda')
+const numberStream = require('./some/readable/numbersStream')
 
-_Execute the command `npm run make:publish`. If UPDATE_GIT_BRANCHES is 'true' branches `develop` and `master` will be update in remote and local repo._
+_.(someReadableStream)
+.map(R.add(1))
+.map(R.multiply(2))
+.filter(R.gt(20))
+.reduce(0, R.add)
+.get()
+.on('data', console.log)
 
-```bash
-
-npm run make:publish <VERSION> <UPDATE_GIT_BRANCHES>
-
-# Example: npm run make:publish 1.0.0 true
 ```
 
 ## License

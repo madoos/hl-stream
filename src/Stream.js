@@ -5,6 +5,12 @@ const { Transform } = require('stream')
 const R = require('ramda')
 const U = require('./utils')
 
+  /**
+   * Creates an instance of Stream.
+   *
+   * @param {ReadableStream|Array|Generator|Iterable} src
+   * @memberof Stream
+  */
 class Stream extends Events {
   constructor (src) {
     super()
@@ -39,10 +45,13 @@ class Stream extends Events {
  * Return a new instance of WrappedStream.
  *
  * @static
+ * @function
  * @param {ReadableStream} src
+ * @method wrap
  * @param {String|Array} args
  * @returns {WrappedStream} Wrapped Stream.
  * @memberof Stream
+ * @nocollapse
  * @example
  *
  * const wrappedStream = _.wrap(readableStream)

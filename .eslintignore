@@ -3,3 +3,4 @@ __tests__
 bin/CLI/index.js
 coverage
 docs
+manual

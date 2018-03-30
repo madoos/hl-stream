@@ -1,0 +1,56 @@
+{
+  "source": "./src/",
+  "destination": "./docs",
+  "plugins": [
+    {
+      "name": "esdoc-node"
+    },
+    {
+      "name": "esdoc-brand-plugin",
+      "option": {
+        "title": "hl-stream",
+        "repository": "https://github.com/madoos/hl-stream",
+        "site": "https://github.com/madoos",
+        "author": "https://github.com/madoos"
+      }
+    },
+    {
+      "name": "esdoc-inject-script-plugin",
+      "option": {
+        "enable": true,
+        "scripts": ["./manual/assets/myscript.js"]
+      }
+    },
+    {
+      "name": "esdoc-inject-style-plugin",
+      "option": {
+        "enable": true,
+        "styles": ["./manual/assets/style.css"]
+      }
+    },
+    {
+      "name": "esdoc-publish-html-plugin",
+      "option": {
+        "template": "./node_modules/esdoc-custom-theme/template"
+      }
+    },
+    {
+      "name": "esdoc-standard-plugin",
+      "option": {
+        "coverage": {
+          "enable": true
+        },
+        "accessor": {
+          "access": ["public"],
+          "autoPrivate": true
+        },
+        "manual": {
+          "index": "./README.md",
+          "globalIndex": true,
+          "asset": "./manual/assets",
+          "files": ["./manual/Usage.md", "./manual/Documentation.md"]
+        }
+      }
+    }
+  ]
+}
