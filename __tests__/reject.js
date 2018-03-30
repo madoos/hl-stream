@@ -3,7 +3,7 @@
 const matchers = require('../__mocks__/matchers')
 expect.extend(matchers)
 
-const Stream = require('../')
+const _ = require('../')
 const numberStream = require('../__mocks__/numbers')
 
 describe('.reject Method', () => {
@@ -12,7 +12,7 @@ describe('.reject Method', () => {
     const isPair = (n) => n % 2 === 0
     const expected = [1, 3, 5]
     const results = []
-    const filterStream = Stream.reject(isPair, numberStream(7))
+    const filterStream = _.reject(isPair, numberStream(7))
 
     expect(filterStream).isTransformStream()
 
@@ -29,7 +29,7 @@ describe('.reject Method', () => {
     const expected = [0, 2, 4, 6]
     const results = []
 
-    const filteredStream = Stream(numberStream(7)).reject(isOdd)
+    const filteredStream = _(numberStream(7)).reject(isOdd)
     expect(filteredStream).isWrappedStream()
     const composedStream = filteredStream.get()
     expect(composedStream).isTransformStream()

@@ -5,7 +5,7 @@
 
 -   [Stream][1]
 -   [wrap][2]
--   [from][3]
+-   [ReadableFrom][3]
 -   [pipeline][4]
 -   [get][5]
 -   [map][6]
@@ -20,11 +20,27 @@
 
 **Extends Events**
 
-Creates an instance of Stream.
+Creates an instance of hl-stream. Take as argument and Array, ReadableStream, Generator function, Instance of generator function and Iterable.
 
 **Parameters**
 
 -   `src` **(ReadableStream | [Array][13] | Generator | Iterable)** 
+
+**Examples**
+
+```javascript
+const _ = require('hl-stream')
+const R = require('ramda')
+const value = await _([1, 2]).map(R.add(1)).reduce(0, R.add).toPromise(Promise) // => 5
+
+// or
+
+const value = await _.pipeline(
+ _.map(R.add(1)),
+ _.reduce(0, R.add),
+ _.toPromise(Promise)
+)([1, 2]) // => 5
+```
 
 ## wrap
 
@@ -44,7 +60,7 @@ const result = wrappedStream.map(add(1)).reduce(0, add).toPromise(Promise)
 
 Returns **WrappedStream** Wrapped Stream.
 
-## from
+## ReadableFrom
 
 Create an new instance of ReadableStream.
 
@@ -55,9 +71,9 @@ Create an new instance of ReadableStream.
 **Examples**
 
 ```javascript
-const readableStreamFromArray = _.from([1, 2, 3, 4]) // => 1, 2, 3, 4
-const readableStreamGeneratorFunction = _.from(function * () { yield 2 }) // 2
-const readableStreamFromIterator _.from(new Set(['value1', 'value2', 'value3'])) // => 'value1', 'value2', 'value3'
+const readableStreamFromArray = _.ReadableFrom([1, 2, 3, 4]) // => 1, 2, 3, 4
+const readableStreamGeneratorFunction = _.ReadableFrom(function * () { yield 2 }) // => 2
+const readableStreamFromIterator _.ReadableFrom(new Set(['value1', 'value2', 'value3'])) // => 'value1', 'value2', 'value3'
 ```
 
 Returns **ReadableStream** It will emit all the data of src.
@@ -78,7 +94,7 @@ const addTwoAnFilterPairs = _.pipeline(
    _.filter(pairs)
 )
 
-addTwoAnFilterPairs(_.from([1, 2, 3, 4])) // => 4, 6
+addTwoAnFilterPairs([1, 2, 3, 4]) // => 4, 6
 ```
 
 Returns **[Function][15]** When is executed it returns a Transform Stream composed by the steps of the pipeline.
@@ -113,7 +129,7 @@ _([1, 2, 3, 4]).map(double) // => 2, 4, 6, 8
 
 // or
 
-_.map(double, _.from([1, 2, 3, 4])) // => 2, 4, 6, 8
+_.map(double, [1, 2, 3, 4]) // => 2, 4, 6, 8
 ```
 
 Returns **TransformStream** 
@@ -133,7 +149,7 @@ _([1, 2, 3, 4]).tap(console.log) // => 1, 2, 3, 4, in console 1, 2, 3, 4
 
 // or
 
-_.tap(console.log, from([1, 2, 3, 4])) // => 1, 2, 3, 4, in console 1, 2, 3, 4
+_.tap(console.log, [1, 2, 3, 4]) // => 1, 2, 3, 4, in console 1, 2, 3, 4
 ```
 
 ## filter
@@ -148,11 +164,12 @@ Takes a predicate and create a new stream with the members of the given filterab
 
 ```javascript
 const isPair = (n) => n % 2 === 0
-_([1, 2, 3, 4]).filter(isPair)
 
-// or// => 2, 4
+_([1, 2, 3, 4]).filter(isPair) // => 2, 4
 
-_.filter(isPair, _.from([1, 2, 3, 4])) // => 2, 4
+// or
+
+_.filter(isPair, [1, 2, 3, 4]) // => 2, 4
 ```
 
 Returns **TransformStream** Stream with the filtered objects.
@@ -170,11 +187,12 @@ Removes every element in the stream that complies with the predicate
 
 ```javascript
 const isPair = (n) => n % 2 === 0
+
 _([1, 2, 3, 4]).reject(isPairs) // => 1, 3
 
 // Or
 
-_.filter(isPairs, _.from([1, 2, 3, 4])) // => 1, 3
+_.filter(isPairs, [1, 2, 3, 4]) // => 1, 3
 ```
 
 Returns **TransformStream** Stream with not rejected items
@@ -194,7 +212,7 @@ _([1, 2, 3, 4, 5]).batch(2) // => [1, 2], [3, 4], [5]
 
 // or
 
-_.batch(2, _.from([1, 2, 3, 4, 5])) // => [1, 2], [3, 4], [5]
+_.batch(2, [1, 2, 3, 4, 5]) // => [1, 2], [3, 4], [5]
 ```
 
 Returns **TransformStream** 
@@ -215,7 +233,7 @@ _([1, 2, 3, 4]).reduce(add) // => 10
 
 // or
 
-_.reduce(add, _.from([1, 2, 3, 4])) // => 10
+_.reduce(add, [1, 2, 3, 4]) // => 10
 ```
 
 Returns **TransformStream** Stream with the reduced value.
@@ -232,13 +250,13 @@ Converts the result of a stream to Promise.
 
 ```javascript
 _([1, 2, 3, 4]).reduce(0, add).toPromise(Promise).then(function (result) {
-  // parameter result will be 10
+  // => 10
  })
 
 // or
 
-_.toPromise(Promise, _.from([1, 2, 3, 5])).then(function (result) {
-  // parameter result will be 10
+_.toPromise(Promise, [1, 2, 3, 5]).then(function (result) {
+  // => [1, 2, 3, 5]
  })
 ```
 
@@ -248,7 +266,7 @@ Returns **[Promise][17]** result
 
 [2]: #wrap
 
-[3]: #from
+[3]: #readablefrom
 
 [4]: #pipeline
 

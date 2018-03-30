@@ -9,17 +9,11 @@ module.exports = {
   isDuplexStream,
   isTransformStream,
   isWrappedStream,
-  streamFromIterator
-}
-
-function streamFromIterator (src) {
-  return new Readable({
-    objectMode: true,
-    read () {
-      for (let data of src) this.push(data)
-      this.push(null)
-    }
-  })
+  streamFromIterator,
+  isGeneratorFunction,
+  isIterable,
+  getIterator,
+  streamFromGenerator
 }
 
 function isStream (src) {
@@ -67,4 +61,34 @@ function isWrappedStream (src) {
     Array.isArray(src._transformQueue) &&
     src._src
   )
+}
+
+function isGeneratorFunction (fn) {
+  return fn != null && fn.constructor.name === 'GeneratorFunction'
+}
+
+function isIterable (obj) {
+  return obj == null ? false : typeof obj[Symbol.iterator] === 'function'
+}
+
+function getIterator (src) {
+  return src[Symbol.iterator]()
+}
+
+function streamFromIterator (iterator) {
+  return new Readable({
+    objectMode: true,
+    read (data) {
+      try {
+        const { done, value } = iterator.next()
+        !done ? this.push(value) : this.push(null)
+      } catch (e) {
+        this.emit('error', e)
+      }
+    }
+  })
+}
+
+function streamFromGenerator (src) {
+  return streamFromIterator(src())
 }

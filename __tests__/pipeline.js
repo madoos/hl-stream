@@ -3,14 +3,14 @@
 const matchers = require('../__mocks__/matchers')
 expect.extend(matchers)
 
-const Stream = require('../')
+const _ = require('../')
 const numberStream = require('../__mocks__/numbers')
 const R = require('ramda')
 
 describe('pipeline Method', () => {
 
   it('static pipeline should compose a transform', (done) => {
-    const { map, pipeline } = Stream
+    const { map, pipeline } = _
     const numbers = numberStream(3)
     const values = []
     const expected = [2, 4, 6]

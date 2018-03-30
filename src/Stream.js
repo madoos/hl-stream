@@ -6,23 +6,39 @@ const R = require('ramda')
 const U = require('./utils')
 
   /**
-   * Creates an instance of Stream.
+   * Creates an instance of hl-stream. Take as argument and Array, ReadableStream, Generator function, Instance of generator function and Iterable.
    *
    * @param {ReadableStream|Array|Generator|Iterable} src
    * @memberof Stream
+   * @example
+   *
+   * const _ = require('hl-stream')
+   * const R = require('ramda')
+   * const value = await _([1, 2]).map(R.add(1)).reduce(0, R.add).toPromise(Promise) // => 5
+   *
+   * // or
+   *
+   * const value = await _.pipeline(
+   *  _.map(R.add(1)),
+   *  _.reduce(0, R.add),
+   *  _.toPromise(Promise)
+   * )([1, 2]) // => 5
+   *
   */
 class Stream extends Events {
   constructor (src) {
     super()
-    this._src = Stream.from(src)
+    this._src = Stream.ReadableFrom(src)
     this._transformQueue = []
     this.__wrapped_stream__ = true
   }
 
   static _exposeMethod (name, Target) {
-    const fn = Stream.prototype[name]
+    const fn = Stream.prototype[name] // makes sure to transform any valid type into a readable stream
     const arity = fn.length + 1
-    Target[name] = R.curryN(arity, (...args) => fn.apply(args.pop(), args))
+    Target[name] = R.curryN(arity, (...args) => {
+      return fn.apply(Stream.ReadableFrom(args.pop()), args)
+    })
   }
 
   static _exposeStaticMethod (name, Target) {
@@ -71,13 +87,14 @@ class Stream extends Events {
  * @memberof Stream
  * @example
  *
- * const readableStreamFromArray = _.from([1, 2, 3, 4]) // => 1, 2, 3, 4
- * const readableStreamGeneratorFunction = _.from(function * () { yield 2 }) // 2
- * const readableStreamFromIterator _.from(new Set(['value1', 'value2', 'value3'])) // => 'value1', 'value2', 'value3'
+ * const readableStreamFromArray = _.ReadableFrom([1, 2, 3, 4]) // => 1, 2, 3, 4
+ * const readableStreamGeneratorFunction = _.ReadableFrom(function * () { yield 2 }) // => 2
+ * const readableStreamFromIterator _.ReadableFrom(new Set(['value1', 'value2', 'value3'])) // => 'value1', 'value2', 'value3'
  */
-  static from (src) {
-    if (Array.isArray(src)) return U.streamFromIterator(src)
-    else if (U.isStream(src)) return src
+  static ReadableFrom (src) {
+    if (U.isStream(src)) return src
+    else if (U.isIterable(src)) return U.streamFromIterator(U.getIterator(src))
+    else if (U.isGeneratorFunction(src)) return U.streamFromGenerator(src)
   }
 /**
  *
@@ -95,7 +112,7 @@ class Stream extends Events {
  *    _.filter(pairs)
  * )
  *
- * addTwoAnFilterPairs(_.from([1, 2, 3, 4])) // => 4, 6
+ * addTwoAnFilterPairs([1, 2, 3, 4]) // => 4, 6
  *
  */
   static pipeline (...transforms) {
@@ -142,7 +159,7 @@ class Stream extends Events {
  *
  * // or
  *
- * _.map(double, _.from([1, 2, 3, 4])) // => 2, 4, 6, 8
+ * _.map(double, [1, 2, 3, 4]) // => 2, 4, 6, 8
  */
   map (fn) {
     const map = new Transform({
@@ -166,7 +183,7 @@ class Stream extends Events {
  *
  * // or
  *
- * _.tap(console.log, from([1, 2, 3, 4])) // => 1, 2, 3, 4, in console 1, 2, 3, 4
+ * _.tap(console.log, [1, 2, 3, 4]) // => 1, 2, 3, 4, in console 1, 2, 3, 4
  *
  */
   tap (fn) {
@@ -182,11 +199,12 @@ class Stream extends Events {
  * @example
  *
  * const isPair = (n) => n % 2 === 0
- * _([1, 2, 3, 4]).filter(isPair)
  *
- * // or// => 2, 4
+ * _([1, 2, 3, 4]).filter(isPair) // => 2, 4
  *
- * _.filter(isPair, _.from([1, 2, 3, 4])) // => 2, 4
+ * // or
+ *
+ * _.filter(isPair, [1, 2, 3, 4]) // => 2, 4
  *
  */
   filter (predicate) {
@@ -211,11 +229,12 @@ class Stream extends Events {
  * @example
  *
  * const isPair = (n) => n % 2 === 0
+ *
  * _([1, 2, 3, 4]).reject(isPairs) // => 1, 3
  *
  * // Or
  *
- * _.filter(isPairs, _.from([1, 2, 3, 4])) // => 1, 3
+ * _.filter(isPairs, [1, 2, 3, 4]) // => 1, 3
  */
   reject (predicate) {
     return Stream.filter(R.complement(predicate), this)
@@ -233,7 +252,7 @@ class Stream extends Events {
  *
  * // or
  *
- * _.batch(2, _.from([1, 2, 3, 4, 5])) // => [1, 2], [3, 4], [5]
+ * _.batch(2, [1, 2, 3, 4, 5]) // => [1, 2], [3, 4], [5]
  */
   batch (size) {
     let dataBatch = []
@@ -274,7 +293,7 @@ class Stream extends Events {
  *
  * // or
  *
- * _.reduce(add, _.from([1, 2, 3, 4])) // => 10
+ * _.reduce(add, [1, 2, 3, 4]) // => 10
  *
  */
   reduce (initial, fn) {
@@ -303,13 +322,13 @@ class Stream extends Events {
  *
  *
  * _([1, 2, 3, 4]).reduce(0, add).toPromise(Promise).then(function (result) {
- *   // parameter result will be 10
+ *   // => 10
  *  })
  *
  * // or
  *
- * _.toPromise(Promise, _.from([1, 2, 3, 5])).then(function (result) {
- *   // parameter result will be 10
+ * _.toPromise(Promise, [1, 2, 3, 5]).then(function (result) {
+ *   // => [1, 2, 3, 5]
  *  })
  *
  */

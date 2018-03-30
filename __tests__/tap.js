@@ -3,7 +3,7 @@
 const matchers = require('../__mocks__/matchers')
 expect.extend(matchers)
 
-const Stream = require('../')
+const _ = require('../')
 const numberStream = require('../__mocks__/numbers')
 
 describe('.tap Method', () => {
@@ -14,7 +14,7 @@ describe('.tap Method', () => {
     const expected = [0, 1, 2]
     const results = []
 
-    const tappedStream = Stream.tap(
+    const tappedStream = _.tap(
       (data) => {
         times++
         isTapped = true
@@ -40,7 +40,7 @@ describe('.tap Method', () => {
     const results = []
     const expected = [0, 1, 2]
     const numbers = numberStream(3)
-    const wrappedStream = Stream(numbers)
+    const wrappedStream = _(numbers)
 
     const tappedStream = wrappedStream.tap( (data) => {
       times++

@@ -3,7 +3,7 @@
 const matchers = require('../__mocks__/matchers')
 expect.extend(matchers)
 
-const Stream = require('../')
+const _ = require('../')
 const numberStream = require('../__mocks__/numbers')
 
 describe('.batch Method', () => {
@@ -12,7 +12,7 @@ describe('.batch Method', () => {
     const numbers = numberStream(8)
     const expected = [[0, 1, 2], [3, 4, 5], [6, 7]]
     const results = []
-    const batchStream = Stream.batch(3, numbers)
+    const batchStream = _.batch(3, numbers)
     expect(batchStream).isTransformStream()
 
     batchStream
@@ -28,7 +28,7 @@ describe('.batch Method', () => {
     const expected = [[0, 1]]
     const results = []
 
-    const batchStream = Stream(numbers).batch(2)
+    const batchStream = _(numbers).batch(2)
     expect(batchStream).isWrappedStream()
     const composedStream = batchStream.get()
     expect(composedStream).isTransformStream()
