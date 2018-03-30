@@ -1,0 +1,14 @@
+.npm
+.git
+.gitignore
+.editorconfig
+node_modules
+.DS_Store
+npm-debug.log
+*.crt
+*.key
+*.pem
+coverage
+bin
+__tests__
+__mocks__
