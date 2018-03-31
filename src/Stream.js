@@ -79,6 +79,25 @@ class Stream extends Events {
   }
 /**
  *
+ * Promisify a node-style callback function.
+ * @static
+ * @param {Function} fn
+ * @param {Function} [PromiseConstructor=Promise]
+ * @returns {Function} Promisified function
+ * @memberof Stream
+ */
+  static promisify (fn, PromiseConstructor = Promise) {
+    return function (...args) {
+      return new PromiseConstructor((resolve, reject) => {
+        fn(...args, (err, data) => {
+          if (!err) resolve(data)
+          else reject(err)
+        })
+      })
+    }
+  }
+/**
+ *
  * Create an new instance of ReadableStream.
  *
  * @static

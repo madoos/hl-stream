@@ -5,17 +5,18 @@
 
 -   [Stream][1]
 -   [wrap][2]
--   [readableFrom][3]
--   [pipeline][4]
--   [get][5]
--   [map][6]
--   [tap][7]
--   [filter][8]
--   [reject][9]
--   [batch][10]
--   [reduce][11]
--   [toPromise][12]
--   [take][13]
+-   [promisify][3]
+-   [readableFrom][4]
+-   [pipeline][5]
+-   [get][6]
+-   [map][7]
+-   [tap][8]
+-   [filter][9]
+-   [reject][10]
+-   [batch][11]
+-   [reduce][12]
+-   [toPromise][13]
+-   [take][14]
 
 ## Stream
 
@@ -25,7 +26,7 @@ Creates an instance of hl-stream. Take as argument and Array, ReadableStream, Ge
 
 **Parameters**
 
--   `src` **(ReadableStream | [Array][14] | Generator | Iterable)** 
+-   `src` **(ReadableStream | [Array][15] | Generator | Iterable)** 
 
 **Examples**
 
@@ -50,7 +51,7 @@ Return a new instance of WrappedStream.
 **Parameters**
 
 -   `src` **ReadableStream** 
--   `args` **([String][15] \| [Array][14])** 
+-   `args` **([String][16] \| [Array][15])** 
 
 **Examples**
 
@@ -61,13 +62,24 @@ const result = wrappedStream.map(add(1)).reduce(0, add).toPromise(Promise)
 
 Returns **WrappedStream** Wrapped Stream.
 
+## promisify
+
+Promisify a node-style callback function.
+
+**Parameters**
+
+-   `fn` **[Function][17]** 
+-   `PromiseConstructor` **[Function][17]**  (optional, default `Promise`)
+
+Returns **[Function][17]** Promisified function
+
 ## readableFrom
 
 Create an new instance of ReadableStream.
 
 **Parameters**
 
--   `src` **([Array][14] | Iterator | ReadableStream | [Function][16])** 
+-   `src` **([Array][15] | Iterator | ReadableStream | [Function][17])** 
 
 **Examples**
 
@@ -85,7 +97,7 @@ Creates a function that when executed returns a stream composed by the steps of 
 
 **Parameters**
 
--   `transforms` **...[Function][16]** 
+-   `transforms` **...[Function][17]** 
 
 **Examples**
 
@@ -98,7 +110,7 @@ const addTwoAnFilterPairs = _.pipeline(
 addTwoAnFilterPairs([1, 2, 3, 4]) // => 4, 6
 ```
 
-Returns **[Function][16]** When is executed it returns a Transform Stream composed by the steps of the pipeline.
+Returns **[Function][17]** When is executed it returns a Transform Stream composed by the steps of the pipeline.
 
 ## get
 
@@ -120,7 +132,7 @@ Creates a new Stream of transformed values by applying a function to each value 
 
 **Parameters**
 
--   `fn` **[Function][16]** 
+-   `fn` **[Function][17]** 
 
 **Examples**
 
@@ -141,7 +153,7 @@ Runs the given function with the supplied object, then returns the object.
 
 **Parameters**
 
--   `fn` **[Function][16]** 
+-   `fn` **[Function][17]** 
 
 **Examples**
 
@@ -159,7 +171,7 @@ Takes a predicate and create a new stream with the members of the given filterab
 
 **Parameters**
 
--   `predicate` **[Function][16]** 
+-   `predicate` **[Function][17]** 
 
 **Examples**
 
@@ -182,7 +194,7 @@ Removes every element in the stream that complies with the predicate
 
 **Parameters**
 
--   `predicate` **[Function][16]** 
+-   `predicate` **[Function][17]** 
 
 **Examples**
 
@@ -204,7 +216,7 @@ Takes one Stream and batches incoming data into arrays of given length.
 
 **Parameters**
 
--   `size` **[Number][17]** 
+-   `size` **[Number][18]** 
 
 **Examples**
 
@@ -225,7 +237,7 @@ Boils down a Stream to a single value.
 **Parameters**
 
 -   `initial` **any** 
--   `fn` **[Function][16]** 
+-   `fn` **[Function][17]** 
 
 **Examples**
 
@@ -245,7 +257,7 @@ Converts the result of a stream to Promise.
 
 **Parameters**
 
--   `PromiseConstructor` **[Function][16]** 
+-   `PromiseConstructor` **[Function][17]** 
 
 **Examples**
 
@@ -261,7 +273,7 @@ _.toPromise(Promise, [1, 2, 3, 5]).then(function (result) {
  })
 ```
 
-Returns **[Promise][18]** result
+Returns **[Promise][19]** result
 
 ## take
 
@@ -269,7 +281,7 @@ Take n items from readable stream and destroy the stream source.
 
 **Parameters**
 
--   `n` **[Number][17]** 
+-   `n` **[Number][18]** 
 
 **Examples**
 
@@ -278,7 +290,7 @@ _([1, 2, 3, 4]).take(2) // => 1, 2
 
  // or
 
- _.take(2, [1, 2, 3, 4]) // => 1, 2
+ _.take(2, [1, 2, 3, 4])
 ```
 
 Returns **ReadableStream** 
@@ -287,34 +299,36 @@ Returns **ReadableStream**
 
 [2]: #wrap
 
-[3]: #readablefrom
+[3]: #promisify
 
-[4]: #pipeline
+[4]: #readablefrom
 
-[5]: #get
+[5]: #pipeline
 
-[6]: #map
+[6]: #get
 
-[7]: #tap
+[7]: #map
 
-[8]: #filter
+[8]: #tap
 
-[9]: #reject
+[9]: #filter
 
-[10]: #batch
+[10]: #reject
 
-[11]: #reduce
+[11]: #batch
 
-[12]: #topromise
+[12]: #reduce
 
-[13]: #take
+[13]: #topromise
 
-[14]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[14]: #take
 
-[15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[18]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[18]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[19]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
