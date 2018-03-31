@@ -12,6 +12,13 @@
       "runtimeExecutable": "/home/maurice/.nvm/versions/node/v8.6.0/bin/node"
     },
     {
+      "type": "node",
+      "request": "launch",
+      "name": "Example take",
+      "program": "${workspaceFolder}/examples/take.js",
+      "runtimeExecutable": "/home/maurice/.nvm/versions/node/v8.6.0/bin/node"
+    },
+    {
       "name": "Tests",
       "type": "node",
       "request": "launch",

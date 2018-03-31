@@ -7,7 +7,7 @@ module.exports = function naturals (max) {
   return new Readable({
     objectMode: true,
     read () {
-      (start < max) ? this.push(start++) : this.push(null)
+      start < max ? this.push(start++) : this.push(null)
     }
   })
 }

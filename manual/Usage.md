@@ -35,9 +35,11 @@ _.map((n) => n+1, [1, 2, 3]).on('data', console.log) // => 2, 3, 4
 ```
 ## Compose with partial application
 
+To use composition use the .pipeline method, these method returns the composite function.
+
 ```javascript
 
-const numbersStream = _.ReadableFrom([0, 1, 2, 3, 4, 5])
+const numbersStream = _.readableFrom([0, 1, 2, 3, 4, 5])
 const takeTreeAndDouble = _.pipeline(_.take(3),_.map(double))
 
 const stream = takeTreeAndDouble(numbersStream).on('data', console.log) // => 0, 2, 4

@@ -7,13 +7,13 @@ const _ = require('../')
 const numberStream = require('../__mocks__/numbers')
 const R = require('ramda')
 
-describe('ReadableFrom Method', () => {
+describe('readableFrom Method', () => {
 
-  it('static .ReadableFrom(stream) should return the same readable stream', (done) => {
+  it('static .readableFrom(stream) should return the same readable stream', (done) => {
     const values = []
     const numbers = numberStream(4)
     const expected = [0, 1, 2, 3]
-    const stream = _.ReadableFrom(numbers)
+    const stream = _.readableFrom(numbers)
 
     expect(numbers === stream).toEqual(true)
     expect(stream).isReadableStream()
@@ -26,11 +26,11 @@ describe('ReadableFrom Method', () => {
     })
   })
 
-  it('static .ReadableFrom(Array) should create a readable stream with the same values', (done) => {
+  it('static .readableFrom(Array) should create a readable stream with the same values', (done) => {
     const values = []
     const src = [1, 2, 3]
 
-    const stream = _.ReadableFrom(src)
+    const stream = _.readableFrom(src)
     expect(stream).isReadableStream()
 
     stream
@@ -41,7 +41,7 @@ describe('ReadableFrom Method', () => {
     })
   })
 
-  it('static .ReadableFrom(GeneratorFunction) should create a readable stream with the same values', (done) => {
+  it('static .readableFrom(GeneratorFunction) should create a readable stream with the same values', (done) => {
     const values = []
     const expected = [1, 2, 3]
     const src = function * () {
@@ -50,7 +50,7 @@ describe('ReadableFrom Method', () => {
       yield 3
     }
 
-    const stream = _.ReadableFrom(src)
+    const stream = _.readableFrom(src)
     expect(stream).isReadableStream()
 
     stream
@@ -61,7 +61,7 @@ describe('ReadableFrom Method', () => {
     })
   })
 
-  it('static .ReadableFrom(Generator instance) should create a readable stream with the same values', (done) => {
+  it('static .readableFrom(Generator instance) should create a readable stream with the same values', (done) => {
     const values = []
     const expected = [1, 2, 3]
     const src = (function * () {
@@ -70,7 +70,7 @@ describe('ReadableFrom Method', () => {
       yield 3
     })()
 
-    const stream = _.ReadableFrom(src)
+    const stream = _.readableFrom(src)
     expect(stream).isReadableStream()
 
     stream
@@ -81,12 +81,12 @@ describe('ReadableFrom Method', () => {
     })
   })
 
-  it('static .ReadableFrom(Set) should create a readable stream with the same values', (done) => {
+  it('static .readableFrom(Set) should create a readable stream with the same values', (done) => {
     const values = []
     const expected = [1, 2, 3]
     const src = new Set([1, 2, 3])
 
-    const stream = _.ReadableFrom(src)
+    const stream = _.readableFrom(src)
     expect(stream).isReadableStream()
 
     stream
@@ -97,14 +97,14 @@ describe('ReadableFrom Method', () => {
     })
   })
 
-  it('static .ReadableFrom(Map) should create a readable stream with the same values', (done) => {
+  it('static .readableFrom(Map) should create a readable stream with the same values', (done) => {
     const values = []
     const expected = [['0', 'foo'], [1, 'bar']]
     const src = new Map();
     src.set('0', 'foo')
     src.set(1, 'bar')
 
-    const stream = _.ReadableFrom(src)
+    const stream = _.readableFrom(src)
     expect(stream).isReadableStream()
 
     stream

@@ -5,7 +5,7 @@
 
 -   [Stream][1]
 -   [wrap][2]
--   [ReadableFrom][3]
+-   [readableFrom][3]
 -   [pipeline][4]
 -   [get][5]
 -   [map][6]
@@ -15,6 +15,7 @@
 -   [batch][10]
 -   [reduce][11]
 -   [toPromise][12]
+-   [take][13]
 
 ## Stream
 
@@ -24,7 +25,7 @@ Creates an instance of hl-stream. Take as argument and Array, ReadableStream, Ge
 
 **Parameters**
 
--   `src` **(ReadableStream | [Array][13] | Generator | Iterable)** 
+-   `src` **(ReadableStream | [Array][14] | Generator | Iterable)** 
 
 **Examples**
 
@@ -49,7 +50,7 @@ Return a new instance of WrappedStream.
 **Parameters**
 
 -   `src` **ReadableStream** 
--   `args` **([String][14] \| [Array][13])** 
+-   `args` **([String][15] \| [Array][14])** 
 
 **Examples**
 
@@ -60,20 +61,20 @@ const result = wrappedStream.map(add(1)).reduce(0, add).toPromise(Promise)
 
 Returns **WrappedStream** Wrapped Stream.
 
-## ReadableFrom
+## readableFrom
 
 Create an new instance of ReadableStream.
 
 **Parameters**
 
--   `src` **([Array][13] | Iterator | ReadableStream | [Function][15])** 
+-   `src` **([Array][14] | Iterator | ReadableStream | [Function][16])** 
 
 **Examples**
 
 ```javascript
-const readableStreamFromArray = _.ReadableFrom([1, 2, 3, 4]) // => 1, 2, 3, 4
-const readableStreamGeneratorFunction = _.ReadableFrom(function * () { yield 2 }) // => 2
-const readableStreamFromIterator _.ReadableFrom(new Set(['value1', 'value2', 'value3'])) // => 'value1', 'value2', 'value3'
+const readableStreamFromArray = _.readableFrom([1, 2, 3, 4]) // => 1, 2, 3, 4
+const readableStreamGeneratorFunction = _.readableFrom(function * () { yield 2 }) // => 2
+const readableStreamFromIterator _.readableFrom(new Set(['value1', 'value2', 'value3'])) // => 'value1', 'value2', 'value3'
 ```
 
 Returns **ReadableStream** It will emit all the data of src.
@@ -84,7 +85,7 @@ Creates a function that when executed returns a stream composed by the steps of 
 
 **Parameters**
 
--   `transforms` **...[Function][15]** 
+-   `transforms` **...[Function][16]** 
 
 **Examples**
 
@@ -97,7 +98,7 @@ const addTwoAnFilterPairs = _.pipeline(
 addTwoAnFilterPairs([1, 2, 3, 4]) // => 4, 6
 ```
 
-Returns **[Function][15]** When is executed it returns a Transform Stream composed by the steps of the pipeline.
+Returns **[Function][16]** When is executed it returns a Transform Stream composed by the steps of the pipeline.
 
 ## get
 
@@ -119,7 +120,7 @@ Creates a new Stream of transformed values by applying a function to each value 
 
 **Parameters**
 
--   `fn` **[Function][15]** 
+-   `fn` **[Function][16]** 
 
 **Examples**
 
@@ -140,7 +141,7 @@ Runs the given function with the supplied object, then returns the object.
 
 **Parameters**
 
--   `fn` **[Function][15]** 
+-   `fn` **[Function][16]** 
 
 **Examples**
 
@@ -158,7 +159,7 @@ Takes a predicate and create a new stream with the members of the given filterab
 
 **Parameters**
 
--   `predicate` **[Function][15]** 
+-   `predicate` **[Function][16]** 
 
 **Examples**
 
@@ -181,7 +182,7 @@ Removes every element in the stream that complies with the predicate
 
 **Parameters**
 
--   `predicate` **[Function][15]** 
+-   `predicate` **[Function][16]** 
 
 **Examples**
 
@@ -203,7 +204,7 @@ Takes one Stream and batches incoming data into arrays of given length.
 
 **Parameters**
 
--   `size` **[Number][16]** 
+-   `size` **[Number][17]** 
 
 **Examples**
 
@@ -224,7 +225,7 @@ Boils down a Stream to a single value.
 **Parameters**
 
 -   `initial` **any** 
--   `fn` **[Function][15]** 
+-   `fn` **[Function][16]** 
 
 **Examples**
 
@@ -244,7 +245,7 @@ Converts the result of a stream to Promise.
 
 **Parameters**
 
--   `PromiseConstructor` **[Function][15]** 
+-   `PromiseConstructor` **[Function][16]** 
 
 **Examples**
 
@@ -260,7 +261,27 @@ _.toPromise(Promise, [1, 2, 3, 5]).then(function (result) {
  })
 ```
 
-Returns **[Promise][17]** result
+Returns **[Promise][18]** result
+
+## take
+
+Take n items from readable stream and destroy the stream source.
+
+**Parameters**
+
+-   `n` **[Number][17]** 
+
+**Examples**
+
+```javascript
+_([1, 2, 3, 4]).take(2) // => 1, 2
+
+ // or
+
+ _.take(2, [1, 2, 3, 4]) // => 1, 2
+```
+
+Returns **ReadableStream** 
 
 [1]: #stream
 
@@ -286,12 +307,14 @@ Returns **[Promise][17]** result
 
 [12]: #topromise
 
-[13]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[13]: #take
 
-[14]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[14]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[18]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise

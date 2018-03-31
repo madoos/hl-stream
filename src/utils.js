@@ -1,6 +1,7 @@
 'use strict'
 
 const { Readable } = require('stream')
+const R = require('ramda')
 
 module.exports = {
   isStream,
@@ -13,7 +14,9 @@ module.exports = {
   isGeneratorFunction,
   isIterable,
   getIterator,
-  streamFromGenerator
+  streamFromGenerator,
+  isFunction,
+  takeFromReadable: R.curry(takeFromReadable)
 }
 
 function isStream (src) {
@@ -91,4 +94,22 @@ function streamFromIterator (iterator) {
 
 function streamFromGenerator (src) {
   return streamFromIterator(src())
+}
+
+function isFunction (fn) {
+  return typeof fn === 'function'
+}
+
+function takeFromReadable (n, src, onTaken) {
+  let times = 0
+  const take = new Readable({ objectMode: true, read () {} })
+  src.on('data', function (data) {
+    if (times++ < n) {
+      take.push(data)
+    } else {
+      take.push(null)
+      onTaken()
+    }
+  })
+  return take
 }
