@@ -16,7 +16,8 @@ module.exports = {
   getIterator,
   streamFromGenerator,
   isFunction,
-  takeFromReadable: R.curry(takeFromReadable)
+  takeFromReadable: R.curry(takeFromReadable),
+  isPromise
 }
 
 function isStream (src) {
@@ -112,4 +113,8 @@ function takeFromReadable (n, src, onTaken) {
     }
   })
   return take
+}
+
+function isPromise (obj) {
+  return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function'
 }

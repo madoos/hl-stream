@@ -67,7 +67,6 @@ class Stream extends Events {
  * @param {String|Array} args
  * @returns {WrappedStream} Wrapped Stream.
  * @memberof Stream
- * @nocollapse
  * @example
  *
  * const wrappedStream = _.wrap(readableStream)
@@ -85,6 +84,11 @@ class Stream extends Events {
  * @param {Function} [PromiseConstructor=Promise]
  * @returns {Function} Promisified function
  * @memberof Stream
+ * @example
+ *
+ * const wrappedFn = _.promisify(nodeStyleFn)
+ * wrappedFn().then(console.log) // => wrappedFn return promise
+ *
  */
   static promisify (fn, PromiseConstructor = Promise) {
     return function (...args) {
@@ -189,15 +193,26 @@ class Stream extends Events {
  * // or
  *
  * _.map(double, [1, 2, 3, 4]) // => 2, 4, 6, 8
+ *
+ * // Use promises
+ *
+ * _([1, 2, 3, 4]).map((data) => Promise.resolve(data)) // => 1, 2, 3, 4
+ * _.map((data) => Promise.resolve(data), [1, 2, 3, 4]) // => 1, 2, 3, 4
+ *
  */
   map (fn) {
     const map = new Transform({
       objectMode: true,
       transform (data, enc, done) {
-        done(null, fn(data, enc))
+        try {
+          const obj = fn(data, enc)
+          if (U.isPromise(obj)) obj.then((_data) => done(null, _data)).catch(done)
+          else done(null, obj)
+        } catch (e) {
+          done(e)
+        }
       }
     })
-
     return this.pipe(map)
   }
 /**

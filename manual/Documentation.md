@@ -71,6 +71,13 @@ Promisify a node-style callback function.
 -   `fn` **[Function][17]** 
 -   `PromiseConstructor` **[Function][17]**  (optional, default `Promise`)
 
+**Examples**
+
+```javascript
+const wrappedFn = _.promisify(nodeStyleFn)
+wrappedFn().then(console.log) // => wrappedFn return promise
+```
+
 Returns **[Function][17]** Promisified function
 
 ## readableFrom
@@ -143,6 +150,11 @@ _([1, 2, 3, 4]).map(double) // => 2, 4, 6, 8
 // or
 
 _.map(double, [1, 2, 3, 4]) // => 2, 4, 6, 8
+
+// Use promises
+
+_([1, 2, 3, 4]).map((data) => Promise.resolve(data)) // => 1, 2, 3, 4
+_.map((data) => Promise.resolve(data), [1, 2, 3, 4]) // => 1, 2, 3, 4
 ```
 
 Returns **TransformStream** 

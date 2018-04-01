@@ -44,4 +44,23 @@ describe('.map Method', () => {
     })
   })
 
+  it('.map should apply the async for each item', (done) => {
+    const results = []
+    const expected = [0, 1, 2, 3]
+    const numbers = numberStream(4)
+    const wrappedStream = _(numbers)
+    const mappedStream = wrappedStream.map((n) => Promise.resolve(n))
+    const composedStream = mappedStream.get()
+
+    expect(mappedStream).isWrappedStream()
+    expect(composedStream).isTransformStream()
+
+    composedStream
+    .on('data', (n) => results.push(n))
+    .on('end', () => {
+      results.forEach((n) => expect(typeof(n) === 'number').toEqual(true))
+      expect(results).toEqual(expected)
+      done()
+    })
+  })
 })
