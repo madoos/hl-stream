@@ -6,6 +6,8 @@ High level streams library based on native node transforms inspired by [highland
 
 The main focus is to provide a functional interface using the native Node streams.
 
+For more information see [manual/Usage](manual/Usage.md) and [manual/Documentation](manual/Documentation.md)
+
 ## Getting Started
 
 To install:
