@@ -2,7 +2,8 @@
 
 # hl-stream
 
-High level streams library for Node js inspired by [highland](https://highlandjs.org/) and [ramda](http://ramdajs.com/).
+High level streams library based on native node transforms inspired by [highland](https://highlandjs.org/) and [ramda](http://ramdajs.com/).
+
 The main focus is to provide a functional interface using the native Node streams.
 
 ## Getting Started
@@ -13,8 +14,7 @@ To install:
 
 In your project:
 
-``` javascript
-
+```javascript
 const _ = require('hl-stream')
 const R = require('ramda')
 const numberStream = require('./some/readable/numbersStream')
@@ -26,7 +26,6 @@ _.(numberStream)
 .reduce(0, R.add)
 .get()
 .on('data', console.log)
-
 ```
 
 ## License
@@ -41,4 +40,3 @@ MIT © [Maurice Domínguez](maurice.ronet.dominguez@gmail.com)
 [daviddm-url]: https://david-dm.org/madoos/hl-stream
 [coveralls-image]: https://coveralls.io/repos/madoos/hl-stream/badge.svg
 [coveralls-url]: https://coveralls.io/r/madoos/hl-stream
-

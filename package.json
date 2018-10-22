@@ -1,7 +1,7 @@
 {
   "name": "hl-stream",
-  "version": "0.0.0",
-  "description": "high-level streams library",
+  "version": "1.0.0",
+  "description": "high-level streams library based on native node transforms",
   "main": "index.js",
   "dependencies": {
     "ramda": "^0.25.0"
